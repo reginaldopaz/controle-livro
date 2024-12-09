@@ -1,0 +1,147 @@
+﻿/* Import Font Awesome */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+/* Estilo do corpo */
+.body-content {
+    margin-top: 15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Estilo da sidebar */
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+    .sidebar .nav-link {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+    }
+
+    .sidebar .image {
+        margin-right: 10px;
+    }
+
+    .sidebar .nav-link:hover {
+        background-color: #e2e6ea;
+    }
+
+    .sidebar .nav-link .nav-icon {
+        margin-right: 10px;
+    }
+
+/* Outras estilizações */
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+input,
+select,
+textarea {
+    max-width: 280px;
+}
+
+.form-horizontal {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.control-label {
+    font-weight: bold;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+}
+
+.text-danger {
+    color: red;
+}
+
+.footer {
+    padding: 1rem 0;
+    background-color: #f8f9fa;
+}
+.listbox-single-line {
+    height: 35px; 
+    max-height: 35px; 
+    overflow-y: auto; 
+    overflow-x: hidden; 
+}
+
+.form-control[multiple] {
+    height: auto; 
+    max-height: 35px; 
+    overflow-y: hidden; 
+}
+.wide-dropdown {
+    width: 250px; 
+}
+
+/* Estiliza a dropdown list */
+.form-control {
+    width: 850px; /* Define a largura fixa para a dropdown */
+    padding: 10px; /* Adiciona espaçamento interno */
+    font-size: 16px; /* Aumenta o tamanho da fonte */
+    border: 1px solid #ced4da; /* Define a borda */
+    border-radius: 4px; /* Arredonda os cantos */
+    appearance: none; /* Remove o estilo padrão do navegador */
+    -moz-appearance: none; /* Remove o estilo padrão do Firefox */
+    -webkit-appearance: none; /* Remove o estilo padrão do Safari */
+    background-color: #f8f9fa; /* Define a cor de fundo */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3E%3Cpath fill='%23999' d='M2 0L0 2h4z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px 10px;
+    cursor: pointer;
+}
+
+    /* Remove a seta padrão do IE */
+    .form-control::-ms-expand {
+        display: none;
+    }
+
+/* Estilo para o cabeçalho da tabela */
+
+.table thead th {
+    background-color: #007bff; /* Cor de fundo do cabeçalho */
+    color: white; /* Cor do texto do cabeçalho */
+    text-align: center; /* Centraliza o texto */
+    padding: 10px; /* Espaçamento interno */
+}
+
+/* Estilo zebra para as linhas do corpo da tabela */
+.table tbody tr:nth-child(odd) {
+    background-color: #f2f2f2; /* Cor de fundo para linhas ímpares */
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #ffffff; /* Cor de fundo para linhas pares */
+}
+
+/* Estilo para bordas da tabela */
+.table, .table th, .table td {
+    border: 1px solid #dddddd; /* Cor das bordas */
+    border-collapse: collapse; /* Colapsa bordas adjacentes */
+    padding: 8px; /* Espaçamento interno das células */
+    text-align: left; /* Alinha o texto à esquerda */
+}
+
+    /* Adiciona um hover effect nas linhas */
+    .table tbody tr:hover {
+        background-color: #e9ecef; /* Cor de fundo ao passar o mouse */
+    }
+
+
