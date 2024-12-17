@@ -43,11 +43,18 @@ End Code
                     @Html.EditorFor(Function(model) model.AnoPublicacao, New With {.htmlAttributes = New With {.class = "form-control"}})
                     @Html.ValidationMessageFor(Function(model) model.AnoPublicacao, "", New With {.class = "text-danger"})
                 </td>
-                <td colspan="2">
+                <td>
                     @Html.LabelFor(Function(model) model.Valor, htmlAttributes:=New With {.class = "control-label"})
-                    @Html.EditorFor(Function(model) model.Valor, New With {.htmlAttributes = New With {.class = "form-control", .id = "valor"}})
+                    @Html.EditorFor(Function(model) model.Valor, New With {.htmlAttributes = New With {.class = "form-control", .id = "valor", .data_val = "false", .data_val_number = "false"}})
                     @Html.ValidationMessageFor(Function(model) model.Valor, "", New With {.class = "text-danger"})
+
                 </td>
+                <td>
+                    @Html.LabelFor(Function(model) model.DataPublicacao, htmlAttributes:=New With {.class = "control-label"})
+                    @Html.EditorFor(Function(model) model.DataPublicacao, New With {.htmlAttributes = New With {.class = "form-control", .type = "date"}})
+                    @Html.ValidationMessageFor(Function(model) model.DataPublicacao, "", New With {.class = "text-danger"})
+                </td>
+
             </tr>
         </table>
 
@@ -97,7 +104,6 @@ End Using
             </table>
         </div>
 
-
     End Using
 
     <div id="gridViewSection">
@@ -118,116 +124,99 @@ End Using
 </div>
 
 @section Scripts
-    @Scripts.Render("~/bundles/jqueryval")
+    
+    <script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+             $(document).ready(function () {
+                if ($.fn.inputmask) {
+                    $('#valor').inputmask({
+                        alias: 'decimal',
+                        groupSeparator: '.',
+                        radixPoint: ',',
+                        autoGroup: true,
+                        digits: 2,
+                        digitsOptional: false,
+                        placeholder: '0',
+                        removeMaskOnSubmit: true,
+                        rightAlign: false,
+                        showMaskOnHover: false,
+                        showMaskOnFocus: true
+                    });
+                } else {
+                    console.error("Inputmask não está disponível.");
+                }
+
+                // Ajuste o método de validação de número para aceitar vírgula
+                if ($.validator && $.validator.methods) {
+                    $.validator.methods.number = function (value, element) {
+                        return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)?(?:,\d+)?$/.test(value);
+                    };
+                }
+
+                // Configuração global para adicionar o token antifalsificação a todas as requisições POST
+                $.ajaxSetup({
+                    beforeSend: function (xhr, settings) {
+                        if (settings.type === 'POST') {
+                            var token = $('input[name="__RequestVerificationToken"]').val();
+                            xhr.setRequestHeader('RequestVerificationToken', token);
+                        }
+                    }
+                });
+
+                // Ação para salvar o livro
+                $('#salvarLivro').click(function (e) {
+                    e.preventDefault();
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("Create", "Livro")',
+                        data: $('#livroForm').serialize(),
+                        success: function (response) {
+                            if (response.success) {
+                                $('#mensagem').show();
+                                $('#addSection').show();
+                                $('#livroId').val(response.livroId); // Armazena o ID do livro salvo
+                                $('#salvarLivro').prop('disabled', true);
+                            } else {
+                                alert(response.message || 'Erro ao salvar o livro.');
+                            }
+                        },
+                        error: function () {
+                            alert('Erro ao tentar salvar o livro.');
+                        }
+                    });
+                });
+
+                // Ação para adicionar autor e assunto
+                $('#adicionar').click(function (e) {
+                    e.preventDefault();
+                    var token = $('input[name="__RequestVerificationToken"]').val();
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("AddAuthorAssunto", "Livro")',
+                        data: {
+                            __RequestVerificationToken: token, // Inclua o token no data
+                            livroId: $('#livroId').val(),
+                            selectedAuthor: $('#selectedAuthor').val(),
+                            selectedAssunto: $('#selectedAssunto').val()
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                $('#gridViewBody').append('<tr><td>' + response.autorNome + '</td><td>' + response.assuntoDescricao + '</td></tr>');
+                            } else {
+                                alert(response.message || 'Erro ao adicionar autor e assunto aqui.');
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert('Erro ao tentar adicionar autor e assunto Erro: ' + textStatus + ' - ' + errorThrown);
+                            console.log(jqXHR.responseText);
+                        }
+                    });
+                });
+            });
+        </script>
 
     <script type="text/javascript">
 
-       $(document).ready(function () {
-        // Configuração global para adicionar o token antifalsificação a todas as requisições POST
-        $.ajaxSetup({
-            beforeSend: function (xhr, settings) {
-                if (settings.type === 'POST') {
-                    var token = $('input[name="__RequestVerificationToken"]').val();
-                    xhr.setRequestHeader('RequestVerificationToken', token);
-                }
-            }
-        });
-
-        $('#valor').inputmask('decimal', {
-            radixPoint: ',',
-            groupSeparator: '.',
-            autoGroup: true,
-            digits: 2,
-            rightAlign: false,
-            removeMaskOnSubmit: true
-        });
-
-        // Ação para salvar o livro
-        $('#salvarLivro').click(function (e) {
-            e.preventDefault();
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("Create", "Livro")',
-                data: $('#livroForm').serialize(),
-                success: function (response) {
-                    if (response.success) {
-                        $('#mensagem').show();
-                        $('#addSection').show();
-                        $('#livroId').val(response.livroId); // Armazena o ID do livro salvo
-                        $('#salvarLivro').prop('disabled', true);
-                    } else {
-                        alert(response.message || 'Erro ao salvar o livro.');
-                    }
-                },
-                error: function () {
-                    alert('Erro ao tentar salvar o livro.');
-                }
-            });
-        });
-
-        // Ação para adicionar autor e assunto
-        $('#adicionar').click(function (e) {
-            e.preventDefault();
-            var token = $('input[name="__RequestVerificationToken"]').val();
-            $.ajax({
-                type: 'POST',
-                url: '@Url.Action("AddAuthorAssunto", "Livro")',
-                data: {
-                    __RequestVerificationToken: token, // Inclua o token no data
-                    livroId: $('#livroId').val(),
-                    selectedAuthor: $('#selectedAuthor').val(),
-                    selectedAssunto: $('#selectedAssunto').val()
-                },
-                success: function (response) {
-                    if (response.success) {
-                        $('#gridViewBody').append('<tr><td>' + response.autorNome + '</td><td>' + response.assuntoDescricao + '</td></tr>');
-                    } else {
-                        alert(response.message || 'Erro ao adicionar autor e assunto aqui.');
-                    }
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert('Erro ao tentar adicionar autor e assunto Erro: ' + textStatus + ' - ' + errorThrown);
-                    console.log(jqXHR.responseText);
-                }
-            });
-        });
-
-
-    });
     </script>
-
 End Section
-<style>
-    .table thead th {
-        background-color: #007bff; /* Cor de fundo do cabeçalho */
-        color: white; /* Cor do texto do cabeçalho */
-        text-align: center; /* Centraliza o texto */
-        padding: 10px; /* Espaçamento interno */
-    }
 
-    /* Estilo zebra para as linhas do corpo da tabela */
-    .table tbody tr:nth-child(odd) {
-        background-color: #f2f2f2; /* Cor de fundo para linhas ímpares */
-    }
-
-    .table tbody tr:nth-child(even) {
-        background-color: #ffffff; /* Cor de fundo para linhas pares */
-    }
-
-    /* Estilo para bordas da tabela */
-    .table, .table th, .table td {
-        border: 1px solid #dddddd; /* Cor das bordas */
-        border-collapse: collapse; /* Colapsa bordas adjacentes */
-        padding: 8px; /* Espaçamento interno das células */
-        text-align: left; /* Alinha o texto à esquerda */
-    }
-
-        /* Adiciona um hover effect nas linhas */
-        .table tbody tr:hover {
-            background-color: #e9ecef; /* Cor de fundo ao passar o mouse */
-        }
-
-</style>

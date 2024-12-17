@@ -35,6 +35,14 @@ $.extend( $.fn, {
 			return validator;
 		}
 
+		if ($.validator && $.validator.methods) {
+			$.validator.methods.number = function (value, element) {
+				return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:\.\d{3})+)?(?:,\d+)?$/.test(value);
+			};
+		}
+
+		
+
 		// Add novalidate tag if HTML5.
 		this.attr( "novalidate", "novalidate" );
 

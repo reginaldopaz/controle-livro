@@ -15,7 +15,7 @@ Namespace ControleLivros.Repositories.Implementations
         Public Async Function GetRelatorio() As Task(Of IEnumerable(Of RelatorioModel)) Implements IRelatorioRepository.GetRelatorio
             Dim query = "SELECT Nome, Titulo, Descricao FROM Relatorio"
             Dim relatorios = Await _dbContext.Database.SqlQuery(Of RelatorioModel)(query).ToListAsync()
-            'Console.WriteLine("Número de registros retornados: " & relatorios.Count())
+
             Return relatorios
 
         End Function

@@ -5,5 +5,6 @@ Namespace ControleLivros.Models.Entities
         <Key>
         Public Property Livro_Codl As Integer
         Public Property Assunto_CodAs As Integer
+
     End Class
 End Namespace

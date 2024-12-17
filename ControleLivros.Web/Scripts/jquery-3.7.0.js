@@ -3775,8 +3775,38 @@ jQuery.Deferred.exceptionHook = function( error, asyncError ) {
 	}
 };
 
+	//$('#valor').inputmask('decimal', {
+	//	alias: 'numeric',
+	//	groupSeparator: '.',
+	//	radixPoint: ',',
+	//	autoGroup: true,
+	//	digits: 2,
+	//	digitsOptional: false,
+	//	placeholder: '0',
+	//	removeMaskOnSubmit: true,
+	//	rightAlign: false,
+	//	showMaskOnHover: false,
+	//	showMaskOnFocus: true
+	//});
 
-
+	//$(document).ready(function () {
+	//	if ($.fn.inputmask) {
+	//		$('#valor').inputmask({
+	//			alias: 'decimal',
+	//			groupSeparator: '.',
+	//			radixPoint: ',',
+	//			autoGroup: true,
+	//			digits: 2,
+	//			digitsOptional: false,
+	//			placeholder: '0',
+	//			removeMaskOnSubmit: true,
+	//			rightAlign: false,
+	//			showMaskOnHover: false,
+	//			showMaskOnFocus: true
+	//		});
+	//	} else {
+	//		console.error("Inputmask não está disponível.");
+	//	}
 
 jQuery.readyException = function( error ) {
 	window.setTimeout( function() {

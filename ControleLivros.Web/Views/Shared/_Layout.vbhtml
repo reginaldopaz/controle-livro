@@ -60,14 +60,14 @@
                             Assunto
                         </a>
                     </li>
-                        
+
                     <li class="nav-item">
                         <a href="/Relatorio/Index" class="nav-link">
                             <img src="/Imagens/Relatorio.png" alt="Relatorio" style="width: 20px; height: 20px; margin-right: 5px;" />
                             Relatorio
                         </a>
                     </li>
-                                       
+
 
                 </ul>
             </div>
@@ -82,11 +82,13 @@
     </div>
 
     <!-- Inclua o jQuery antes de qualquer plugin que dependa dele -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
     <!-- Inclua o jQuery Mask Plugin -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
-    @Scripts.Render("~/bundles/jquery")
+    @*@Scripts.Render("~/bundles/jquery")*@
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required:=False)
 </body>

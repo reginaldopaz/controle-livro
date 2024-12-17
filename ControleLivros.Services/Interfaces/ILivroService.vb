@@ -11,5 +11,10 @@ Namespace ControleLivros.Services.Interfaces
         Function AddAuthorToLivroAsync(livroId As Integer, authorId As Integer) As Task ' Adicionando método
         Function AddAssuntoToLivroAsync(livroId As Integer, assuntoId As Integer) As Task ' Opcional, para adicionar assunto
 
+        Function GetAutoresByLivroIdAsync(livroId As Integer) As Task(Of IEnumerable(Of Integer))
+        Function GetAssuntosByLivroIdAsync(livroId As Integer) As Task(Of IEnumerable(Of Integer))
+        Function UpdateAuthorsAsync(livroId As Integer, selectedAuthors As String()) As Task
+        Function UpdateAssuntosAsync(livroId As Integer, selectedAssuntos As String()) As Task
+
     End Interface
 End Namespace

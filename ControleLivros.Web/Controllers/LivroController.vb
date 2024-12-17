@@ -3,7 +3,9 @@ Imports System.Net
 Imports System.Threading.Tasks
 Imports ControleLivros.Models.ControleLivros.Models.Entities
 Imports ControleLivros.Services.ControleLivros.Services.Interfaces
-
+Imports PagedList.Mvc
+Imports PagedList
+Imports System.Web.Mvc
 
 Namespace Controllers
     Public Class LivroController
@@ -20,15 +22,27 @@ Namespace Controllers
         End Sub
 
         ' GET: Livro
-        Async Function Index() As Task(Of ActionResult)
+        Async Function Index(Optional pageNumber As Integer = 1, Optional pageSize As Integer = 10, Optional codlFiltro As String = Nothing) As Task(Of ActionResult)
             Try
                 Dim livros = Await _livroService.GetAllAsync()
-                Return View(livros)
+
+                If Not String.IsNullOrEmpty(codlFiltro) Then
+                    Dim codl As Integer
+                    If Integer.TryParse(codlFiltro, codl) Then
+                        livros = livros.Where(Function(l) l.Codl = codl).ToList()
+                    End If
+                End If
+
+                Dim paginatedLivros = livros.ToPagedList(pageNumber, pageSize)
+
+                Return View(paginatedLivros)
             Catch ex As Exception
-                ModelState.AddModelError(String.Empty, "Ocorreu um erro ao carregar a lista de livros.")
-                Return View(New List(Of Livro))
+                ModelState.AddModelError(String.Empty, "Ocorreu um erro ao carregar a lista de livros." & ex.Message)
+                Return View(New PagedList(Of Livro)(New List(Of Livro), pageNumber, pageSize))
             End Try
         End Function
+
+
 
         ' GET: Livro/Details/5
         Async Function Details(Codl As Integer?) As Task(Of ActionResult)
@@ -99,7 +113,7 @@ Namespace Controllers
         <ValidateAntiForgeryToken>
         Async Function AddAuthorAssunto(livroId As Integer, selectedAuthor As Integer, selectedAssunto As Integer) As Task(Of JsonResult)
             Try
-                ' Supondo que os serviços estejam configurados corretamente
+
                 If selectedAuthor > 0 Then
                     Await _livroService.AddAuthorToLivroAsync(livroId, selectedAuthor)
                 End If
@@ -125,17 +139,37 @@ Namespace Controllers
             End Try
         End Function
 
-        ' GET: Livro/Edit/5
+        ' Método GET: Livro/Edit/5
         Async Function Edit(Codl As Integer?) As Task(Of ActionResult)
-            'If id Is Nothing Then
-            '    Return New HttpStatusCodeResult(HttpStatusCode.BadRequest)
-            'End If
+            If Not Codl.HasValue Then
+                Return New HttpStatusCodeResult(HttpStatusCode.BadRequest)
+            End If
 
             Try
                 Dim livro = Await _livroService.GetByIdAsync(Codl.Value)
                 If livro Is Nothing Then
                     Return HttpNotFound()
                 End If
+
+                ViewBag.Autores = _autorService.GetAll().Select(Function(a) New SelectListItem With {
+                                  .Value = a.CodAu.ToString(),
+                                  .Text = a.Nome
+                                  }).ToList()
+
+                ViewBag.Assuntos = _assuntoService.GetAll().Select(Function(a) New SelectListItem With {
+                                  .Value = a.CodAs.ToString(),
+                                  .Text = a.Descricao
+                                  }).ToList()
+
+
+                'Dim autoresAssociados = livro.Autores.Select(Function(a) a.Nome).ToList()
+                'Dim assuntosAssociados = livro.Assuntos.Select(Function(a) a.Descricao).ToList()
+
+                Dim autoresAssociados = livro.Autores.Select(Function(a) a.CodAu.ToString()).ToList()
+                Dim assuntosAssociados = livro.Assuntos.Select(Function(a) a.CodAs.ToString()).ToList()
+
+                ViewBag.AutoresAssociados = autoresAssociados
+                ViewBag.AssuntosAssociados = assuntosAssociados
 
                 Return View(livro)
             Catch ex As Exception
@@ -144,13 +178,22 @@ Namespace Controllers
             End Try
         End Function
 
+
         ' POST: Livro/Edit/5
-        <HttpPost()>
-        <ValidateAntiForgeryToken()>
-        Async Function Edit(<Bind(Include:="Id,Titulo,Editora,Edicao,AnoPublicacao,Valor")> ByVal livro As Livro) As Task(Of ActionResult)
+        <HttpPost>
+        <ValidateAntiForgeryToken>
+        Async Function Edit(<Bind(Include:="Codl,Titulo,Editora,Edicao,AnoPublicacao,Valor,DataPublicacao")> ByVal livro As Livro, selectedAuthors As String(), selectedAssuntos As String()) As Task(Of ActionResult)
             If ModelState.IsValid Then
                 Try
+                    ' Atualize o livro
                     Await _livroService.UpdateAsync(livro)
+
+                    ' Atualize as associações de autores
+                    Await _livroService.UpdateAuthorsAsync(livro.Codl, selectedAuthors)
+
+                    ' Atualize as associações de assuntos
+                    Await _livroService.UpdateAssuntosAsync(livro.Codl, selectedAssuntos)
+
                     Return RedirectToAction("Index")
                 Catch ex As Exception
                     ModelState.AddModelError(String.Empty, "Ocorreu um erro ao atualizar o livro." & ex.Message)
@@ -158,6 +201,7 @@ Namespace Controllers
             End If
             Return View(livro)
         End Function
+
 
         ' GET: Livro/Delete/5
         Async Function Delete(Codl As Integer?) As Task(Of ActionResult)

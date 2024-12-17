@@ -15,13 +15,15 @@ Public Class VisaoController
     End Sub
 
     ' GET: Visao
-    Public Async Function Index() As Task(Of ActionResult)
+    Public Async Function Index(Optional ByVal nomeFiltro As String = "") As Task(Of ActionResult)
         Try
             Dim relatorio = Await _relatorioService.GetRelatorio()
 
-            ' Log ou debug para verificar o conteúdo
+            If Not String.IsNullOrEmpty(nomeFiltro) Then
+                relatorio = relatorio.Where(Function(r) r.Nome.IndexOf(nomeFiltro, StringComparison.OrdinalIgnoreCase) >= 0).ToList()
+            End If
+
             If relatorio IsNot Nothing AndAlso relatorio.Any() Then
-                ' Talvez usar Console.WriteLine ou um logger para registrar o tamanho
                 Console.WriteLine("Número de itens no relatório: " & relatorio.Count().ToString())
             Else
                 Console.WriteLine("Nenhum dado retornado.")
@@ -33,5 +35,7 @@ Public Class VisaoController
             Return View(New List(Of RelatorioModel))
         End Try
     End Function
+
+
 
 End Class

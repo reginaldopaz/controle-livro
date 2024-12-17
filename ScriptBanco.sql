@@ -1,10 +1,10 @@
 
 
-CREATE DATABASE ControleLivroDB
+CREATE DATABASE ControlesLivroDB
 
 GO
 
-USE ControleLivroDB
+USE ControlesLivroDB
 GO
 
 CREATE TABLE Livro (
@@ -13,7 +13,8 @@ CREATE TABLE Livro (
     Editora VARCHAR(40),
     Edicao INT,
     AnoPublicacao VARCHAR(4),
-    Valor DECIMAL(18, 2)
+    Valor DECIMAL(18, 2),
+	[DataPublicacao] [date] NULL,
 );
 GO
 CREATE TABLE Autor (

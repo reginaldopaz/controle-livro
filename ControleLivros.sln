@@ -13,6 +13,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ControleLivros.Repositories
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ControleLivros.Services", "ControleLivros.Services\ControleLivros.Services.vbproj", "{1FD6C759-656E-4951-A037-F666A11AEDDF}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ControleLivros.Tests", "ControleLivros.Tests\ControleLivros.Tests.vbproj", "{0CD5DB40-F220-4E03-906B-E61F86468532}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{1FD6C759-656E-4951-A037-F666A11AEDDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FD6C759-656E-4951-A037-F666A11AEDDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1FD6C759-656E-4951-A037-F666A11AEDDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0CD5DB40-F220-4E03-906B-E61F86468532}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CD5DB40-F220-4E03-906B-E61F86468532}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CD5DB40-F220-4E03-906B-E61F86468532}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CD5DB40-F220-4E03-906B-E61F86468532}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

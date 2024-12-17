@@ -1,12 +1,18 @@
 ﻿@ModelType IEnumerable(Of ControleLivros.Models.ControleLivros.Models.Entities.RelatorioModel)
 
-
 <h2>Lista Agrupada por Autor</h2>
-
 
 <a href="@Url.Action("Index", "Livro")" class="btn btn-primary mb-3">
     <i class="fas fa-arrow-left"></i> Voltar para Livros
 </a>
+
+<form method="get" action="@Url.Action("Index", "Visao")" class="mb-3">
+    <div class="form-group">
+        <label for="nomeFiltro">Filtrar por Nome:</label>
+        <input type="text" id="nomeFiltro" name="nomeFiltro" class="form-control" value="@Request.QueryString("nomeFiltro")" />
+    </div>
+    <button type="submit" class="btn btn-secondary">Filtrar</button>
+</form>
 
 <div class="table-responsive">
     <table class="table table-bordered table-striped">

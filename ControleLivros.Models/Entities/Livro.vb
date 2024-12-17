@@ -23,9 +23,14 @@ Namespace ControleLivros.Models.Entities
         Public Property AnoPublicacao As String
 
         <DataType(DataType.Currency)>
-        <DisplayFormat(DataFormatString:="{0:N2}", ApplyFormatInEditMode:=True)>
+        <DisplayFormat(DataFormatString:="{0:N2}", ApplyFormatInEditMode:=False)>
         Public Property Valor As Decimal
 
+
+        '<Display(Name:="Data de Publicação")>
+        <DataType(DataType.Date)>
+        <DisplayFormat(DataFormatString:="{0:yyyy-MM-dd}", ApplyFormatInEditMode:=True)>
+        Public Property DataPublicacao As DateTime?
         Public Overridable Property Autores As ICollection(Of Autor) = New HashSet(Of Autor)
         Public Overridable Property Assuntos As ICollection(Of Assunto) = New HashSet(Of Assunto)
 

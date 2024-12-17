@@ -1,5 +1,7 @@
-﻿Imports System.Data.Entity
+﻿Imports System.Data.Common
+Imports System.Data.Entity
 Imports System.Data.Entity.ModelConfiguration
+Imports System.Runtime.Remoting
 Imports System.Runtime.Remoting.Contexts
 Imports ControleLivros.Models
 Imports ControleLivros.Models.ControleLivros.Models.Entities
@@ -12,12 +14,18 @@ Namespace ControleLivros.Data.Context
         Public Sub New()
             MyBase.New("name=ControleLivrosContext")
         End Sub
-        Public Property Livros As DbSet(Of Livro)
+
+        ' Construtor adicional para aceitar uma conexão DbConnection
+        Public Sub New(connection As DbConnection)
+            MyBase.New(connection, contextOwnsConnection:=True)
+        End Sub
+
+        Public Overridable Property Livros As DbSet(Of Livro)
+
         Public Property Autores As DbSet(Of Autor)
         Public Property LivroAutores As DbSet(Of LivroAutor)
         Public Property Assuntos As DbSet(Of Assunto)
         Public Property LivroAssuntos As DbSet(Of LivroAssunto)
-        'Public Property Relatorios As DbSet(Of RelatorioModel)
 
         Protected Overrides Sub OnModelCreating(modelBuilder As DbModelBuilder)
             MyBase.OnModelCreating(modelBuilder)
